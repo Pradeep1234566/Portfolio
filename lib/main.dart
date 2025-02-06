@@ -62,7 +62,8 @@ class WebPortfolioScreen extends StatelessWidget {
                                 'https://github.com/Pradeep1234566'),
                             _buildAppIcon(Icons.code, "Tech Stack", '',
                                 isTechStack: true, context: context),
-                            _buildAppIcon(Icons.star, "Achievements", ''),
+                            _buildAppIcon(Icons.star, "Achievements", '',
+                                isAchievements: true, context: context),
                             _buildAppIcon(Icons.school, "Education", '',
                                 isEducation: true, context: context),
                             _buildAppIcon(Icons.contact_mail, "Contact", '',
@@ -104,6 +105,7 @@ class WebPortfolioScreen extends StatelessWidget {
       {bool isContact = false,
       bool isEducation = false,
       bool isTechStack = false,
+      bool isAchievements = false,
       BuildContext? context}) {
     return GestureDetector(
       onTap: () {
@@ -113,6 +115,8 @@ class WebPortfolioScreen extends StatelessWidget {
           _showEducationDialog(context);
         } else if (isTechStack && context != null) {
           _showTechStackDialog(context);
+        } else if (isAchievements && context != null) {
+          _showAchievementsDialog(context);
         } else if (url.isNotEmpty) {
           launchUrl(Uri.parse(url));
         }
@@ -133,43 +137,49 @@ class WebPortfolioScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Contact Me"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.grey[900],
+          title: Row(
+            children: [
+              Icon(Icons.contact_mail, color: Colors.blueAccent),
+              SizedBox(width: 10),
+              Text(
+                "Contact Me",
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ],
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: Icon(Icons.email, color: Colors.blue),
-                title: Text("pradeeplaxmanraopawar@gmail.com"),
-                onTap: () => launchUrl(
-                    Uri.parse("mailto:pradeeplaxmanraopawar@gmail.com")),
-              ),
-              ListTile(
-                leading: Icon(Icons.link, color: Colors.blue),
-                title: Text("LinkedIn"),
-                onTap: () => launchUrl(Uri.parse(
-                    "https://linkedin.com/in/pradeep-pawar-64345126a")),
-              ),
-              ListTile(
-                leading: Icon(Icons.phone, color: Colors.blue),
-                title: Text("+91 701 9572 787"),
-                onTap: () => launchUrl(Uri.parse("tel:+917019572787")),
-              ),
-              ListTile(
-                leading: Icon(Icons.share, color: Colors.blue),
-                title: Text("Twitter"),
-                onTap: () => launchUrl(
-                    Uri.parse("https://twitter.com/yourtwitterhandle")),
-              ),
+              _buildContactTile(Icons.email, "pradeeplaxmanraopawar@gmail.com",
+                  "mailto:pradeeplaxmanraopawar@gmail.com"),
+              _buildContactTile(Icons.link, "LinkedIn",
+                  "https://linkedin.com/in/pradeep-pawar-64345126a"),
+              _buildContactTile(
+                  Icons.phone, "+91 701 9572 787", "tel:+917019572787"),
+              _buildContactTile(Icons.share, "Twitter",
+                  "https://twitter.com/yourtwitterhandle"),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close"),
+              child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
             ),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildContactTile(IconData icon, String title, String url) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.blue),
+      title: Text(title, style: TextStyle(color: Colors.white)),
+      onTap: () => launchUrl(Uri.parse(url)),
     );
   }
 
@@ -262,13 +272,37 @@ class WebPortfolioScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Tech Stack"),
-          content: Text(
-              "C, Python, Embedded Systems, RTOS, Networking, Data Structures, HTML, CSS"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.grey[900],
+          title: Row(
+            children: [
+              Icon(Icons.code, color: Colors.blueAccent),
+              SizedBox(width: 10),
+              Text(
+                "Tech Stack",
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildBulletPoint("C Programming"),
+              _buildBulletPoint("Embedded Systems"),
+              _buildBulletPoint("Python"),
+              _buildBulletPoint("RTOS (Real-Time Operating Systems)"),
+              _buildBulletPoint("Networking"),
+              _buildBulletPoint("Data Structures & Algorithms"),
+              _buildBulletPoint("HTML, CSS"),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close"),
+              child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
             ),
           ],
         );
@@ -281,13 +315,33 @@ class WebPortfolioScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Achievements"),
-          content: Text(
-              "• Smart India Hackathon 2023 College-Level Round\n• 100+ solved problems on LeetCode"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.grey[900],
+          title: Row(
+            children: [
+              Icon(Icons.star, color: Colors.amber),
+              SizedBox(width: 10),
+              Text(
+                "Achievements",
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildBulletPoint(
+                  "Smart India Hackathon 2023 College-Level Round"),
+              _buildBulletPoint("100+ solved problems on LeetCode"),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close"),
+              child: Text("Close", style: TextStyle(color: Colors.amber)),
             ),
           ],
         );
@@ -295,40 +349,18 @@ class WebPortfolioScreen extends StatelessWidget {
     );
   }
 
-  void _showCertificationsDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Certifications"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(Icons.verified, color: Colors.green),
-                title: Text("JNCIA-Junos (Sep 2024)"),
-                onTap: () => launchUrl(Uri.parse(
-                    "https://www.hackerrank.com/certificates/bde78b838089")),
-              ),
-              ListTile(
-                leading: Icon(Icons.verified, color: Colors.green),
-                title: Text("Python (Basic) – Hackerrank (Jul 2024)"),
-              ),
-              ListTile(
-                leading: Icon(Icons.verified, color: Colors.green),
-                title: Text(
-                    "Python For Machine Learning – Great Learning (Aug 2023)"),
-              ),
-            ],
+  Widget _buildBulletPoint(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Icon(Icons.circle, size: 8, color: Colors.white),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(text, style: TextStyle(color: Colors.white70)),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close"),
-            ),
-          ],
-        );
-      },
+        ],
+      ),
     );
   }
 }
