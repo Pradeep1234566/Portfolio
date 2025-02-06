@@ -63,7 +63,8 @@ class WebPortfolioScreen extends StatelessWidget {
                             _buildAppIcon(Icons.code, "Tech Stack", ''),
                             _buildAppIcon(Icons.star, "Achievements", ''),
                             _buildAppIcon(Icons.school, "Education", ''),
-                            _buildAppIcon(Icons.contact_mail, "Contact", ''),
+                            _buildAppIcon(Icons.contact_mail, "Contact", '',
+                                isContact: true, context: context),
                           ],
                         ),
                       ),
@@ -97,10 +98,13 @@ class WebPortfolioScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAppIcon(IconData icon, String label, String url) {
+  Widget _buildAppIcon(IconData icon, String label, String url,
+      {bool isContact = false, BuildContext? context}) {
     return GestureDetector(
       onTap: () {
-        if (url.isNotEmpty) {
+        if (isContact && context != null) {
+          _showContactDialog(context);
+        } else if (url.isNotEmpty) {
           launchUrl(Uri.parse(url));
         }
       },
@@ -112,6 +116,51 @@ class WebPortfolioScreen extends StatelessWidget {
           Text(label, style: TextStyle(color: Colors.white)),
         ],
       ),
+    );
+  }
+
+  void _showContactDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Contact Me"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.email, color: Colors.blue),
+                title: Text("pradeeplaxmanraopawar@gmail.com"),
+                onTap: () => launchUrl(
+                    Uri.parse("mailto:pradeeplaxmanraopawar@gmail.com")),
+              ),
+              ListTile(
+                leading: Icon(Icons.link, color: Colors.blue),
+                title: Text("LinkedIn"),
+                onTap: () => launchUrl(Uri.parse(
+                    "https://linkedin.com/in/pradeep-pawar-64345126a")),
+              ),
+              ListTile(
+                leading: Icon(Icons.phone, color: Colors.blue),
+                title: Text("+91 701 9572 787"),
+                onTap: () => launchUrl(Uri.parse("tel:+917019572787")),
+              ),
+              ListTile(
+                leading: Icon(Icons.share, color: Colors.blue),
+                title: Text("Twitter"),
+                onTap: () =>
+                    launchUrl(Uri.parse("https://x.com/PradeepPawar007")),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
