@@ -58,8 +58,8 @@ class WebPortfolioScreen extends StatelessWidget {
                           children: [
                             _buildAppIcon(Icons.article, "Resume",
                                 'https://drive.google.com/file/d/1BO0JIw7JQNliLNma5WmgMrDh-iU5tbBy/view?usp=sharing'),
-                            _buildAppIcon(Icons.work, "Projects",
-                                'https://github.com/Pradeep1234566'),
+                            _buildAppIcon(Icons.work, "Projects", '',
+                                isProjects: true, context: context),
                             _buildAppIcon(Icons.code, "Tech Stack", '',
                                 isTechStack: true, context: context),
                             _buildAppIcon(Icons.star, "Achievements", '',
@@ -106,6 +106,7 @@ class WebPortfolioScreen extends StatelessWidget {
       bool isEducation = false,
       bool isTechStack = false,
       bool isAchievements = false,
+      bool isProjects = false,
       BuildContext? context}) {
     return GestureDetector(
       onTap: () {
@@ -117,6 +118,8 @@ class WebPortfolioScreen extends StatelessWidget {
           _showTechStackDialog(context);
         } else if (isAchievements && context != null) {
           _showAchievementsDialog(context);
+        } else if (isProjects && context != null) {
+          _showProjectsDialog(context);
         } else if (url.isNotEmpty) {
           launchUrl(Uri.parse(url));
         }
@@ -132,7 +135,7 @@ class WebPortfolioScreen extends StatelessWidget {
     );
   }
 
-  void _showContactDialog(BuildContext context) {
+  void _showTechStackDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -143,25 +146,25 @@ class WebPortfolioScreen extends StatelessWidget {
           backgroundColor: Colors.grey[900],
           title: Row(
             children: [
-              Icon(Icons.contact_mail, color: Colors.blueAccent),
+              Icon(Icons.code, color: Colors.blueAccent),
               SizedBox(width: 10),
               Text(
-                "Contact Me",
+                "Tech Stack",
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildContactTile(Icons.email, "pradeeplaxmanraopawar@gmail.com",
-                  "mailto:pradeeplaxmanraopawar@gmail.com"),
-              _buildContactTile(Icons.link, "LinkedIn",
-                  "https://linkedin.com/in/pradeep-pawar-64345126a"),
-              _buildContactTile(
-                  Icons.phone, "+91 701 9572 787", "tel:+917019572787"),
-              _buildContactTile(Icons.share, "Twitter",
-                  "https://twitter.com/yourtwitterhandle"),
+              _buildBulletPoint("C Programming"),
+              _buildBulletPoint("Embedded Systems"),
+              _buildBulletPoint("Python"),
+              _buildBulletPoint("RTOS (Real-Time Operating Systems)"),
+              _buildBulletPoint("Networking"),
+              _buildBulletPoint("Data Structures & Algorithms"),
+              _buildBulletPoint("HTML, CSS"),
             ],
           ),
           actions: [
@@ -172,14 +175,6 @@ class WebPortfolioScreen extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-
-  Widget _buildContactTile(IconData icon, String title, String url) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.blue),
-      title: Text(title, style: TextStyle(color: Colors.white)),
-      onTap: () => launchUrl(Uri.parse(url)),
     );
   }
 
@@ -267,7 +262,7 @@ class WebPortfolioScreen extends StatelessWidget {
     );
   }
 
-  void _showTechStackDialog(BuildContext context) {
+  void _showProjectsDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -278,25 +273,25 @@ class WebPortfolioScreen extends StatelessWidget {
           backgroundColor: Colors.grey[900],
           title: Row(
             children: [
-              Icon(Icons.code, color: Colors.blueAccent),
+              Icon(Icons.work, color: Colors.blueAccent),
               SizedBox(width: 10),
               Text(
-                "Tech Stack",
+                "Projects",
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildBulletPoint("C Programming"),
-              _buildBulletPoint("Embedded Systems"),
-              _buildBulletPoint("Python"),
-              _buildBulletPoint("RTOS (Real-Time Operating Systems)"),
-              _buildBulletPoint("Networking"),
-              _buildBulletPoint("Data Structures & Algorithms"),
-              _buildBulletPoint("HTML, CSS"),
+              _buildProjectTile("Instagram Clone", "A social media app clone",
+                  "https://github.com/Pradeep1234566/Instagram_clone"),
+              Divider(color: Colors.blueAccent),
+              _buildProjectTile("TODO App", "Task management application",
+                  "https://github.com/Pradeep1234566/todo"),
+              Divider(color: Colors.blueAccent),
+              _buildProjectTile("Coffee UI", "Stylish coffee shop UI",
+                  "https://github.com/Pradeep1234566/Coffee_ui"),
             ],
           ),
           actions: [
@@ -307,6 +302,67 @@ class WebPortfolioScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildProjectTile(String title, String description, String url) {
+    return ListTile(
+      leading: Icon(Icons.code, color: Colors.blueAccent),
+      title: Text(
+        title,
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(description, style: TextStyle(color: Colors.white70)),
+      onTap: () => launchUrl(Uri.parse(url)),
+    );
+  }
+
+  void _showContactDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.grey[900],
+          title: Row(
+            children: [
+              Icon(Icons.contact_mail, color: Colors.blueAccent),
+              SizedBox(width: 10),
+              Text(
+                "Contact Me",
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildContactTile(Icons.email, "pradeeplaxmanraopawar@gmail.com",
+                  "mailto:pradeeplaxmanraopawar@gmail.com"),
+              _buildContactTile(Icons.link, "LinkedIn",
+                  "https://linkedin.com/in/pradeep-pawar-64345126a"),
+              _buildContactTile(
+                  Icons.phone, "+91 701 9572 787", "tel:+917019572787"),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildContactTile(IconData icon, String title, String url) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.blue),
+      title: Text(title, style: TextStyle(color: Colors.white)),
+      onTap: () => launchUrl(Uri.parse(url)),
     );
   }
 
