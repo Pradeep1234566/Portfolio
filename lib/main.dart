@@ -89,7 +89,11 @@ class WebPortfolioScreen extends StatelessWidget {
                         children: [
                           Icon(Icons.home, color: Colors.white, size: 30),
                           Icon(Icons.search, color: Colors.white, size: 30),
-                          Icon(Icons.settings, color: Colors.white, size: 30),
+                          IconButton(
+                            icon: Icon(Icons.settings,
+                                color: Colors.white, size: 30),
+                            onPressed: () => _showThemeDialog(context),
+                          )
                         ],
                       ),
                     ),
@@ -460,4 +464,71 @@ class _ClockWidgetState extends State<ClockWidget> {
       style: TextStyle(color: Colors.white, fontSize: 18),
     );
   }
+}
+
+void _showThemeDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        backgroundColor: Colors.grey[900],
+        title: Row(
+          children: [
+            Icon(Icons.settings, color: Colors.blueAccent),
+            SizedBox(width: 10),
+            Text(
+              "Theme Settings",
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildThemeOption(context, "Light Theme", true),
+            Divider(color: Colors.white24),
+            _buildThemeOption(context, "Dark Theme", false),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget _buildThemeOption(
+    BuildContext context, String title, bool isLightTheme) {
+  return ListTile(
+    leading: Icon(
+      isLightTheme ? Icons.light_mode : Icons.dark_mode,
+      color: isLightTheme ? Colors.amber : Colors.white,
+    ),
+    title: Text(title, style: TextStyle(color: Colors.white)),
+    onTap: () {
+      ThemeData theme = isLightTheme
+          ? ThemeData.light().copyWith(scaffoldBackgroundColor: Colors.white)
+          : ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.black);
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(
+            "Theme Changed",
+            style: TextStyle(color: Colors.blueAccent),
+          ),
+          content: Text(
+            "Applied $title successfully!",
+          ),
+        ),
+      );
+    },
+  );
 }
