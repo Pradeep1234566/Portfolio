@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -59,7 +60,7 @@ class WebPortfolioScreen extends StatelessWidget {
                           shrinkWrap: true,
                           children: [
                             _buildAppIcon(Icons.article, "Resume",
-                                'https://drive.google.com/file/d/1BO0JIw7JQNliLNma5WmgMrDh-iU5tbBy/view?usp=sharing'),
+                                'https://drive.google.com/file/d/1Mllg5q7gSdu2MMwknoQBnGFei_I3-edl/view?usp=sharing'),
                             _buildAppIcon(Icons.work, "Projects", '',
                                 isProjects: true, context: context),
                             _buildAppIcon(Icons.code, "Tech Stack", '',
@@ -427,45 +428,6 @@ class WebPortfolioScreen extends StatelessWidget {
   }
 }
 
-class ClockWidget extends StatefulWidget {
-  @override
-  _ClockWidgetState createState() => _ClockWidgetState();
-}
-
-class _ClockWidgetState extends State<ClockWidget> {
-  late String _currentTime;
-  late Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateTime();
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _updateTime());
-  }
-
-  void _updateTime() {
-    final now = DateTime.now();
-    setState(() {
-      _currentTime =
-          "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')} ${now.hour < 12 ? 'AM' : 'PM'}";
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      _currentTime,
-      style: TextStyle(color: Colors.white, fontSize: 18),
-    );
-  }
-}
-
 void _showThemeDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -531,4 +493,43 @@ Widget _buildThemeOption(
       );
     },
   );
+}
+
+class ClockWidget extends StatefulWidget {
+  @override
+  _ClockWidgetState createState() => _ClockWidgetState();
+}
+
+class _ClockWidgetState extends State<ClockWidget> {
+  late String _currentTime;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateTime();
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _updateTime());
+  }
+
+  void _updateTime() {
+    final now = DateTime.now();
+    setState(() {
+      _currentTime =
+          "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')} ${now.hour < 12 ? 'AM' : 'PM'}";
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _currentTime,
+      style: TextStyle(color: Colors.white, fontSize: 18),
+    );
+  }
 }
