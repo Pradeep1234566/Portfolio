@@ -60,9 +60,11 @@ class WebPortfolioScreen extends StatelessWidget {
                                 'https://drive.google.com/file/d/1BO0JIw7JQNliLNma5WmgMrDh-iU5tbBy/view?usp=sharing'),
                             _buildAppIcon(Icons.work, "Projects",
                                 'https://github.com/Pradeep1234566'),
-                            _buildAppIcon(Icons.code, "Tech Stack", ''),
+                            _buildAppIcon(Icons.code, "Tech Stack", '',
+                                isTechStack: true, context: context),
                             _buildAppIcon(Icons.star, "Achievements", ''),
-                            _buildAppIcon(Icons.school, "Education", ''),
+                            _buildAppIcon(Icons.school, "Education", '',
+                                isEducation: true, context: context),
                             _buildAppIcon(Icons.contact_mail, "Contact", '',
                                 isContact: true, context: context),
                           ],
@@ -99,11 +101,18 @@ class WebPortfolioScreen extends StatelessWidget {
   }
 
   Widget _buildAppIcon(IconData icon, String label, String url,
-      {bool isContact = false, BuildContext? context}) {
+      {bool isContact = false,
+      bool isEducation = false,
+      bool isTechStack = false,
+      BuildContext? context}) {
     return GestureDetector(
       onTap: () {
         if (isContact && context != null) {
           _showContactDialog(context);
+        } else if (isEducation && context != null) {
+          _showEducationDialog(context);
+        } else if (isTechStack && context != null) {
+          _showTechStackDialog(context);
         } else if (url.isNotEmpty) {
           launchUrl(Uri.parse(url));
         }
@@ -148,11 +157,49 @@ class WebPortfolioScreen extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.share, color: Colors.blue),
                 title: Text("Twitter"),
-                onTap: () =>
-                    launchUrl(Uri.parse("https://x.com/PradeepPawar007")),
+                onTap: () => launchUrl(
+                    Uri.parse("https://twitter.com/yourtwitterhandle")),
               ),
             ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEducationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Education"),
+          content: Text(
+              "B.E. in Electronics and Communication, KLE Technological University"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showTechStackDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tech Stack"),
+          content: Text(
+              "C, Python, Embedded Systems, RTOS, Networking, Data Structures"),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
