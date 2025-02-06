@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -45,8 +47,8 @@ class WebPortfolioScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Text("12:30 PM",
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    ClockWidget(),
+
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.all(10),
@@ -417,6 +419,45 @@ class WebPortfolioScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ClockWidget extends StatefulWidget {
+  @override
+  _ClockWidgetState createState() => _ClockWidgetState();
+}
+
+class _ClockWidgetState extends State<ClockWidget> {
+  late String _currentTime;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateTime();
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _updateTime());
+  }
+
+  void _updateTime() {
+    final now = DateTime.now();
+    setState(() {
+      _currentTime =
+          "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')} ${now.hour < 12 ? 'AM' : 'PM'}";
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _currentTime,
+      style: TextStyle(color: Colors.white, fontSize: 18),
     );
   }
 }
