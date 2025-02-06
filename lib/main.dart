@@ -178,9 +178,93 @@ class WebPortfolioScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Education"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.grey[900],
+          title: Row(
+            children: [
+              Icon(Icons.school, color: Colors.blueAccent),
+              SizedBox(width: 10),
+              Text(
+                "Education",
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildEducationTile(
+                  title: "B.E. in Electronics and Communication",
+                  subtitle:
+                      "KLE Technological University, Hubballi (2021–2025)",
+                  details: "CGPA: 8.43 (up to 6th semester)"),
+              Divider(color: Colors.blueAccent),
+              _buildEducationTile(
+                  title: "Pre-University (PCMS)",
+                  subtitle: "Global Independent College, Hubballi (2019–2021)",
+                  details: "Percentage: 98.33%"),
+              Divider(color: Colors.blueAccent),
+              _buildEducationTile(
+                  title: "SSLC",
+                  subtitle:
+                      "Nirmala K. Thakkar English Medium High School (2019)",
+                  details: "Percentage: 95.68%"),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                "Close",
+                style: TextStyle(color: Colors.blueAccent),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildEducationTile(
+      {required String title,
+      required String subtitle,
+      required String details}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 18),
+          ),
+          Text(
+            subtitle,
+            style: TextStyle(color: Colors.white70),
+          ),
+          Text(
+            details,
+            style: TextStyle(color: Colors.white54),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showTechStackDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tech Stack"),
           content: Text(
-              "B.E. in Electronics and Communication, KLE Technological University"),
+              "C, Python, Embedded Systems, RTOS, Networking, Data Structures, HTML, CSS"),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -192,14 +276,51 @@ class WebPortfolioScreen extends StatelessWidget {
     );
   }
 
-  void _showTechStackDialog(BuildContext context) {
+  void _showAchievementsDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Tech Stack"),
+          title: Text("Achievements"),
           content: Text(
-              "C, Python, Embedded Systems, RTOS, Networking, Data Structures"),
+              "• Smart India Hackathon 2023 College-Level Round\n• 100+ solved problems on LeetCode"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showCertificationsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Certifications"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.verified, color: Colors.green),
+                title: Text("JNCIA-Junos (Sep 2024)"),
+                onTap: () => launchUrl(Uri.parse(
+                    "https://www.hackerrank.com/certificates/bde78b838089")),
+              ),
+              ListTile(
+                leading: Icon(Icons.verified, color: Colors.green),
+                title: Text("Python (Basic) – Hackerrank (Jul 2024)"),
+              ),
+              ListTile(
+                leading: Icon(Icons.verified, color: Colors.green),
+                title: Text(
+                    "Python For Machine Learning – Great Learning (Aug 2023)"),
+              ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
