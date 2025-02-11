@@ -215,7 +215,8 @@ class _WebPortfolioScreenState extends State<WebPortfolioScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
+                child:
+                    Text("Close", style: TextStyle(color: Colors.blueAccent)),
               ),
             ],
           ),
@@ -260,7 +261,8 @@ class _WebPortfolioScreenState extends State<WebPortfolioScreen> {
                 Divider(color: Colors.blueAccent),
                 _buildEducationTile(
                     title: "Pre-University (PCMS)",
-                    subtitle: "Global Independent College, Hubballi (2019–2021)",
+                    subtitle:
+                        "Global Independent College, Hubballi (2019–2021)",
                     details: "Percentage: 98.33%"),
                 Divider(color: Colors.blueAccent),
                 _buildEducationTile(
@@ -354,7 +356,8 @@ class _WebPortfolioScreenState extends State<WebPortfolioScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
+                child:
+                    Text("Close", style: TextStyle(color: Colors.blueAccent)),
               ),
             ],
           ),
@@ -402,7 +405,9 @@ class _WebPortfolioScreenState extends State<WebPortfolioScreen> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildContactTile(Icons.email, "pradeeplaxmanraopawar@gmail.com",
+                _buildContactTile(
+                    Icons.email,
+                    "pradeeplaxmanraopawar@gmail.com",
                     "mailto:pradeeplaxmanraopawar@gmail.com"),
                 _buildContactTile(Icons.link, "LinkedIn",
                     "https://linkedin.com/in/pradeep-pawar-64345126a"),
@@ -413,7 +418,8 @@ class _WebPortfolioScreenState extends State<WebPortfolioScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
+                child:
+                    Text("Close", style: TextStyle(color: Colors.blueAccent)),
               ),
             ],
           ),
