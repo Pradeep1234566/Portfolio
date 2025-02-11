@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -18,7 +16,12 @@ class MyPortfolio extends StatelessWidget {
   }
 }
 
-class WebPortfolioScreen extends StatelessWidget {
+class WebPortfolioScreen extends StatefulWidget {
+  @override
+  _WebPortfolioScreenState createState() => _WebPortfolioScreenState();
+}
+
+class _WebPortfolioScreenState extends State<WebPortfolioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,29 +118,59 @@ class WebPortfolioScreen extends StatelessWidget {
       bool isAchievements = false,
       bool isProjects = false,
       BuildContext? context}) {
-    return GestureDetector(
-      onTap: () {
-        if (isContact && context != null) {
-          _showContactDialog(context);
-        } else if (isEducation && context != null) {
-          _showEducationDialog(context);
-        } else if (isTechStack && context != null) {
-          _showTechStackDialog(context);
-        } else if (isAchievements && context != null) {
-          _showAchievementsDialog(context);
-        } else if (isProjects && context != null) {
-          _showProjectsDialog(context);
-        } else if (url.isNotEmpty) {
-          launchUrl(Uri.parse(url));
-        }
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 50, color: Colors.white),
-          SizedBox(height: 5),
-          Text(label, style: TextStyle(color: Colors.white)),
-        ],
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      transform: Matrix4.identity()..scale(1.0),
+      child: GestureDetector(
+        onTap: () {
+          if (isContact && context != null) {
+            _showContactDialog(context);
+          } else if (isEducation && context != null) {
+            _showEducationDialog(context);
+          } else if (isTechStack && context != null) {
+            _showTechStackDialog(context);
+          } else if (isAchievements && context != null) {
+            _showAchievementsDialog(context);
+          } else if (isProjects && context != null) {
+            _showProjectsDialog(context);
+          } else if (url.isNotEmpty) {
+            launchUrl(Uri.parse(url));
+          }
+        },
+        child: MouseRegion(
+          onEnter: (_) {
+            setState(() {
+              // Scale up on hover
+              _buildAppIcon(icon, label, url,
+                  isContact: isContact,
+                  isEducation: isEducation,
+                  isTechStack: isTechStack,
+                  isAchievements: isAchievements,
+                  isProjects: isProjects,
+                  context: context);
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              // Scale down on exit
+              _buildAppIcon(icon, label, url,
+                  isContact: isContact,
+                  isEducation: isEducation,
+                  isTechStack: isTechStack,
+                  isAchievements: isAchievements,
+                  isProjects: isProjects,
+                  context: context);
+            });
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 50, color: Colors.white),
+              SizedBox(height: 5),
+              Text(label, style: TextStyle(color: Colors.white)),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -146,40 +179,46 @@ class WebPortfolioScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: ModalRoute.of(context)!.animation!,
+            curve: Curves.easeInOut,
           ),
-          backgroundColor: Colors.grey[900],
-          title: Row(
-            children: [
-              Icon(Icons.code, color: Colors.blueAccent),
-              SizedBox(width: 10),
-              Text(
-                "Tech Stack",
-                style: TextStyle(color: Colors.white, fontSize: 24),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.grey[900],
+            title: Row(
+              children: [
+                Icon(Icons.code, color: Colors.blueAccent),
+                SizedBox(width: 10),
+                Text(
+                  "Tech Stack",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildBulletPoint("C Programming"),
+                _buildBulletPoint("Embedded Systems"),
+                _buildBulletPoint("Python"),
+                _buildBulletPoint("RTOS (Real-Time Operating Systems)"),
+                _buildBulletPoint("Networking"),
+                _buildBulletPoint("Data Structures & Algorithms"),
+                _buildBulletPoint("HTML, CSS"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
               ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildBulletPoint("C Programming"),
-              _buildBulletPoint("Embedded Systems"),
-              _buildBulletPoint("Python"),
-              _buildBulletPoint("RTOS (Real-Time Operating Systems)"),
-              _buildBulletPoint("Networking"),
-              _buildBulletPoint("Data Structures & Algorithms"),
-              _buildBulletPoint("HTML, CSS"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
-            ),
-          ],
         );
       },
     );
@@ -189,52 +228,58 @@ class WebPortfolioScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: ModalRoute.of(context)!.animation!,
+            curve: Curves.easeInOut,
           ),
-          backgroundColor: Colors.grey[900],
-          title: Row(
-            children: [
-              Icon(Icons.school, color: Colors.blueAccent),
-              SizedBox(width: 10),
-              Text(
-                "Education",
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildEducationTile(
-                  title: "B.E. in Electronics and Communication",
-                  subtitle:
-                      "KLE Technological University, Hubballi (2021–2025)",
-                  details: "CGPA: 8.43 (up to 6th semester)"),
-              Divider(color: Colors.blueAccent),
-              _buildEducationTile(
-                  title: "Pre-University (PCMS)",
-                  subtitle: "Global Independent College, Hubballi (2019–2021)",
-                  details: "Percentage: 98.33%"),
-              Divider(color: Colors.blueAccent),
-              _buildEducationTile(
-                  title: "SSLC",
-                  subtitle:
-                      "Nirmala K. Thakkar English Medium High School (2019)",
-                  details: "Percentage: 95.68%"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                "Close",
-                style: TextStyle(color: Colors.blueAccent),
-              ),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-          ],
+            backgroundColor: Colors.grey[900],
+            title: Row(
+              children: [
+                Icon(Icons.school, color: Colors.blueAccent),
+                SizedBox(width: 10),
+                Text(
+                  "Education",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildEducationTile(
+                    title: "B.E. in Electronics and Communication",
+                    subtitle:
+                        "KLE Technological University, Hubballi (2021–2025)",
+                    details: "CGPA: 8.43 (up to 6th semester)"),
+                Divider(color: Colors.blueAccent),
+                _buildEducationTile(
+                    title: "Pre-University (PCMS)",
+                    subtitle: "Global Independent College, Hubballi (2019–2021)",
+                    details: "Percentage: 98.33%"),
+                Divider(color: Colors.blueAccent),
+                _buildEducationTile(
+                    title: "SSLC",
+                    subtitle:
+                        "Nirmala K. Thakkar English Medium High School (2019)",
+                    details: "Percentage: 95.68%"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  "Close",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -273,40 +318,46 @@ class WebPortfolioScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: ModalRoute.of(context)!.animation!,
+            curve: Curves.easeInOut,
           ),
-          backgroundColor: Colors.grey[900],
-          title: Row(
-            children: [
-              Icon(Icons.work, color: Colors.blueAccent),
-              SizedBox(width: 10),
-              Text(
-                "Projects",
-                style: TextStyle(color: Colors.white, fontSize: 24),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.grey[900],
+            title: Row(
+              children: [
+                Icon(Icons.work, color: Colors.blueAccent),
+                SizedBox(width: 10),
+                Text(
+                  "Projects",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildProjectTile("Instagram Clone", "A social media app clone",
+                    "https://github.com/Pradeep1234566/Instagram_clone"),
+                Divider(color: Colors.blueAccent),
+                _buildProjectTile("TODO App", "Task management application",
+                    "https://github.com/Pradeep1234566/todo"),
+                Divider(color: Colors.blueAccent),
+                _buildProjectTile("Coffee UI", "Stylish coffee shop UI",
+                    "https://github.com/Pradeep1234566/Coffee_ui"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
               ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildProjectTile("Instagram Clone", "A social media app clone",
-                  "https://github.com/Pradeep1234566/Instagram_clone"),
-              Divider(color: Colors.blueAccent),
-              _buildProjectTile("TODO App", "Task management application",
-                  "https://github.com/Pradeep1234566/todo"),
-              Divider(color: Colors.blueAccent),
-              _buildProjectTile("Coffee UI", "Stylish coffee shop UI",
-                  "https://github.com/Pradeep1234566/Coffee_ui"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
-            ),
-          ],
         );
       },
     );
@@ -328,38 +379,44 @@ class WebPortfolioScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: ModalRoute.of(context)!.animation!,
+            curve: Curves.easeInOut,
           ),
-          backgroundColor: Colors.grey[900],
-          title: Row(
-            children: [
-              Icon(Icons.contact_mail, color: Colors.blueAccent),
-              SizedBox(width: 10),
-              Text(
-                "Contact Me",
-                style: TextStyle(color: Colors.white, fontSize: 24),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.grey[900],
+            title: Row(
+              children: [
+                Icon(Icons.contact_mail, color: Colors.blueAccent),
+                SizedBox(width: 10),
+                Text(
+                  "Contact Me",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildContactTile(Icons.email, "pradeeplaxmanraopawar@gmail.com",
+                    "mailto:pradeeplaxmanraopawar@gmail.com"),
+                _buildContactTile(Icons.link, "LinkedIn",
+                    "https://linkedin.com/in/pradeep-pawar-64345126a"),
+                _buildContactTile(
+                    Icons.phone, "+91 701 9572 787", "tel:+917019572787"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
               ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildContactTile(Icons.email, "pradeeplaxmanraopawar@gmail.com",
-                  "mailto:pradeeplaxmanraopawar@gmail.com"),
-              _buildContactTile(Icons.link, "LinkedIn",
-                  "https://linkedin.com/in/pradeep-pawar-64345126a"),
-              _buildContactTile(
-                  Icons.phone, "+91 701 9572 787", "tel:+917019572787"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
-            ),
-          ],
         );
       },
     );
@@ -377,36 +434,42 @@ class WebPortfolioScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: ModalRoute.of(context)!.animation!,
+            curve: Curves.easeInOut,
           ),
-          backgroundColor: Colors.grey[900],
-          title: Row(
-            children: [
-              Icon(Icons.star, color: Colors.amber),
-              SizedBox(width: 10),
-              Text(
-                "Achievements",
-                style: TextStyle(color: Colors.white, fontSize: 24),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.grey[900],
+            title: Row(
+              children: [
+                Icon(Icons.star, color: Colors.amber),
+                SizedBox(width: 10),
+                Text(
+                  "Achievements",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildBulletPoint(
+                    "Smart India Hackathon 2023 College-Level Round"),
+                _buildBulletPoint("100+ solved problems on LeetCode"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Close", style: TextStyle(color: Colors.amber)),
               ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildBulletPoint(
-                  "Smart India Hackathon 2023 College-Level Round"),
-              _buildBulletPoint("100+ solved problems on LeetCode"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close", style: TextStyle(color: Colors.amber)),
-            ),
-          ],
         );
       },
     );
@@ -432,35 +495,41 @@ void _showThemeDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+      return FadeTransition(
+        opacity: CurvedAnimation(
+          parent: ModalRoute.of(context)!.animation!,
+          curve: Curves.easeInOut,
         ),
-        backgroundColor: Colors.grey[900],
-        title: Row(
-          children: [
-            Icon(Icons.settings, color: Colors.blueAccent),
-            SizedBox(width: 10),
-            Text(
-              "Theme Settings",
-              style: TextStyle(color: Colors.white, fontSize: 24),
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.grey[900],
+          title: Row(
+            children: [
+              Icon(Icons.settings, color: Colors.blueAccent),
+              SizedBox(width: 10),
+              Text(
+                "Theme Settings",
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildThemeOption(context, "Light Theme", true),
+              Divider(color: Colors.white24),
+              _buildThemeOption(context, "Dark Theme", false),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
             ),
           ],
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildThemeOption(context, "Light Theme", true),
-            Divider(color: Colors.white24),
-            _buildThemeOption(context, "Dark Theme", false),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text("Close", style: TextStyle(color: Colors.blueAccent)),
-          ),
-        ],
       );
     },
   );
@@ -500,15 +569,25 @@ class ClockWidget extends StatefulWidget {
   _ClockWidgetState createState() => _ClockWidgetState();
 }
 
-class _ClockWidgetState extends State<ClockWidget> {
+class _ClockWidgetState extends State<ClockWidget>
+    with SingleTickerProviderStateMixin {
   late String _currentTime;
   late Timer _timer;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     _updateTime();
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _updateTime());
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    )..repeat(reverse: true);
+
+    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
   }
 
   void _updateTime() {
@@ -522,14 +601,18 @@ class _ClockWidgetState extends State<ClockWidget> {
   @override
   void dispose() {
     _timer.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      _currentTime,
-      style: TextStyle(color: Colors.white, fontSize: 18),
+    return RotationTransition(
+      turns: _animation,
+      child: Text(
+        _currentTime,
+        style: TextStyle(color: Colors.white, fontSize: 18),
+      ),
     );
   }
 }
